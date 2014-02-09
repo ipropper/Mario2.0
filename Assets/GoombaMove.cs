@@ -31,6 +31,8 @@ public class GoombaMove : MonoBehaviour {
 			child.gameObject.layer = LayerMask.NameToLayer("Death");
 		}
 		anim.SetBool("Flip",true);
+
+		GuiValues.points += 100;
 	}
 
 	void StompDeath()
@@ -44,6 +46,8 @@ public class GoombaMove : MonoBehaviour {
 		anim.SetBool("Stomp",true);
 		this.rigidbody2D.velocity = new Vector2 (0,0);
 		Destroy(this.gameObject,.30f);
+
+		GuiValues.points += 100;
 	}
 
 	void OnTriggerEnter2D(Collider2D other)

@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public struct cameraMove{
+	public Vector3 loc;
+	public bool fixedPos;
+	public cameraMove(Vector3 L, bool F){
+		loc = L;
+		fixedPos = F;
+	}
+}
+
 public class camScript : MonoBehaviour {
 
 	public GameObject Mario;
@@ -8,6 +17,8 @@ public class camScript : MonoBehaviour {
 	public float maxXPos = 0;
 
 	public GameObject respawn1;
+
+	public bool camLock=false;
 
 	// Use this for initialization
 	void Start () {
@@ -36,7 +47,12 @@ public class camScript : MonoBehaviour {
 		transform.position = new Vector3(maxXPos,transform.position.y,transform.position.z);
 	}
 
-	void goThroughPipe(Vector2 newLoc){
-		//TODO
+	void goThroughPipe(cameraMove C){
+		maxXPos = 0;
+		transform.position = C.loc;
+		camLock = C.fixedPos;
+		if(!camLock){
+			maxXPos = -1000;
+		}
 	}
 }

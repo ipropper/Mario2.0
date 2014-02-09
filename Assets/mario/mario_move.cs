@@ -97,6 +97,10 @@ public class mario_move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(GuiValues.timeLeft < 0){
+			GuiValues.respawn();
+		}
 		
 		/*if(temptime < Time.time){
 			Time.timeScale = Random.Range (.1f, 5);
@@ -385,4 +389,9 @@ public class mario_move : MonoBehaviour {
 
 		enlarged = false;
 	}
+
+	public void teleport(Vector3 endPos){
+		this.transform.position = endPos;
+	}
+
 }

@@ -37,6 +37,7 @@ public class KillFire : MonoBehaviour {
 		if(other.tag == "Player" && canUse)
 		{
 			other.SendMessage("fireFlower");
+			GuiValues.points+=1000;
 			Destroy(this.gameObject);
 		}
 	}

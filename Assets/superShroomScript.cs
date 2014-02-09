@@ -23,6 +23,7 @@ public class superShroomScript: MonoBehaviour {
 			Destroy(transform.parent.gameObject);
 			//Debug.Log("got big mushroom");
 			other.SendMessage("gotBigMushroom");
+			GuiValues.points+=1000;
 		}
 		/*else if(other.tag != "Floor" || ){
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)

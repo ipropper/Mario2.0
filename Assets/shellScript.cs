@@ -48,14 +48,16 @@ public class shellScript : MonoBehaviour {
 			{
 				if(other.transform.position.x - transform.position.x < 0)
 				{
-					speed = 10;
+					speed = 12;
 				}
 				else if(other.transform.position.x - transform.position.x >= 0)
 				{
-					speed = -10;
+					speed = -12;
 				}
 				NoStrikeTime = Time.time + .2f;
 				comeback = false;
+
+				GuiValues.points+=500;
 			}
 			//attacks player
 			else if(Time.time - NoStrikeTime > 0)

@@ -50,6 +50,7 @@ public class starScript : MonoBehaviour {
 		if(other.tag == "Player")
 		{
 			other.SendMessage("OnStar");
+			GuiValues.points+=1000;
 			Destroy(this.gameObject);
 		}
 	}

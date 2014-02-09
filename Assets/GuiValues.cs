@@ -29,7 +29,7 @@ public class GuiValues : MonoBehaviour{
 
 	void Update(){
 
-		timeLeft = (int)(totalTime + (startTime - Time.time));
+		timeLeft = (int)(totalTime + 3*(startTime - Time.time));
 	}
 
 	public static void respawn(){

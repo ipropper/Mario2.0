@@ -63,12 +63,18 @@ public class KoopaMain : MonoBehaviour {
 			child.gameObject.layer = LayerMask.NameToLayer("Death");
 		}
 		anim.SetBool("Flip",true);
+
+		GuiValues.points += 100;
+
 		Destroy(this.gameObject,3.0f);
 	}
 
 	void StompDeath()
 	{
 		Destroy(this.gameObject);
+
+		GuiValues.points += 100;
+
 		Instantiate(KoopaShell,this.transform.position,this.transform.rotation);
 	}
 

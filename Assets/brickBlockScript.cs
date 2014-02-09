@@ -27,7 +27,8 @@ public class brickBlockScript : MonoBehaviour {
 	
 	
 	void OnTriggerEnter2D(Collider2D other){
-		if(other.tag=="Player"){
+		if(other.tag=="Player")
+		{
 			
 			if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) < .5f)
 			{
@@ -45,14 +46,14 @@ public class brickBlockScript : MonoBehaviour {
 					jumpBox.SetBool("isPop",true);
 				}
 			}
-			else if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
+			if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
 			        && leftEdge && transform.position.x > other.transform.position.x)
 			{
 				other.transform.position = new Vector3 (transform.position.x - 1.0f,
 				                                        other.transform.position.y,
 				                                        other.transform.position.z);
 			}
-			else if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
+			if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
 			        && rightEdge && transform.position.x < other.transform.position.x)
 			{
 				other.transform.position = new Vector3 (transform.position.x + 1.0f,
@@ -64,6 +65,7 @@ public class brickBlockScript : MonoBehaviour {
 
 	IEnumerator Death()
 	{
+		jumpBox.SetBool("isPop",true);
 		yield return new WaitForSeconds(.1f);
 		Destroy(this.gameObject);
 	}

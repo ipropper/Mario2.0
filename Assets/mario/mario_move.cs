@@ -73,6 +73,8 @@ public class mario_move : MonoBehaviour {
 
 	float invincibleTime = 2.0f;
 
+	public static bool enlarged = false;
+
 	void Start()
 	{
 		runAnim = this.GetComponent<Animator>();
@@ -106,180 +108,187 @@ public class mario_move : MonoBehaviour {
 		}*/
 
 		//animates run + slide
-		runAnim.SetInteger("Speed",(int) Mathf.Ceil(Mathf.Abs(rigidbody2D.velocity.x)));
-		if(rigidbody2D.velocity.x < 0)
+		if(enlarged)
 		{
-			if(prevDirection == KeyCode.D)
+			// do nothing
+		}
+		else
+		{
+			runAnim.SetInteger("Speed",(int) Mathf.Ceil(Mathf.Abs(rigidbody2D.velocity.x)));
+			if(rigidbody2D.velocity.x < 0)
 			{
-				runAnim.SetBool("ChangeDirection",false);
-				canSlide = false;
-				animTime = Time.time;
-			}
-		}
-		else if((rigidbody2D.velocity.x > 0))
-		{
-			if(prevDirection == KeyCode.A)
-			{
-				runAnim.SetBool("ChangeDirection",false);
-				canSlide = false;
-				animTime = Time.time;
-			}
-		}
-
-		if(Time.time - animTime > .50f)
-		{
-			canSlide = true;
-		}
-
-		// THIS IS TO ANIMATE MARIO SLIDE
-		if(Input.GetKeyUp(KeyCode.A) && canSlide)
-		{
-			if(prevDirection == KeyCode.D)
-			{
-				runAnim.SetBool("ChangeDirection",true);
-			}
-			prevDirection = KeyCode.A;
-		}
-		else if(Input.GetKeyUp(KeyCode.D) && canSlide)
-		{
-			if(prevDirection == KeyCode.A)
-			{
-				runAnim.SetBool("ChangeDirection",true);
-			}
-			prevDirection = KeyCode.D;
-		}
-		//END OF SLIDE CODE
-
-		// animate jump
-		runAnim.SetBool("isGrounded",grounded);
-
-
-		if (Input.GetAxis("Horizontal") > 0) {
-			transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x),transform.localScale.y);
-			MarioDir = 1;
-		}
-
-		if (Input.GetAxis("Horizontal") < 0) {
-			transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x),transform.localScale.y);
-			MarioDir = -1;
-		}
-
-
-
-		// creates 3 line casts between player and empty object, if "Ground" layer comes in contact with line allows jump 
-		groundPosC = new Vector2(GroundCheckC.transform.position.x, GroundCheckC.transform.position.y);
-		groundPosL = new Vector2(GroundCheckL.transform.position.x, GroundCheckL.transform.position.y);
-		groundPosR = new Vector2(GroundCheckR.transform.position.x, GroundCheckR.transform.position.y);
-		playePos = new Vector2(transform.position.x, transform.position.y);
-		grounded = Physics2D.Linecast(playePos , groundPosC , 1 << LayerMask.NameToLayer("Ground"))
-					|| Physics2D.Linecast(playePos , groundPosL , 1 << LayerMask.NameToLayer("Ground"))
-					|| Physics2D.Linecast(playePos , groundPosR , 1 << LayerMask.NameToLayer("Ground"));
-		
-			
-			
-			//y is flawed but funtionally works way better...
-		if(rigidbody2D.velocity.y == 0)
-		{
-			grounded = true;
-			jumping = false;
-		}
-
-
-		if(Input.GetKeyDown(Jump) && grounded)
-		{
-
-			more_jump = true;
-			grounded = false;
-			jumpFromHeight = transform.position.y;
-
-			jumping = true;
-
-			rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
-		}
-
-		if(!Input.GetKey(Jump)){
-			more_jump = false;
-		}
-		if (jumping && !grounded && rigidbody2D.velocity.y > 0 && 
-						((Input.GetKey (Jump) && more_jump && (transform.position.y - jumpFromHeight) < maxJumpHeight) 
-						|| (transform.position.y - jumpFromHeight) < minJumpHeight)) {
-
-			rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
-		}
-		if(rigidbody2D.velocity.y < -jumpVel){
-
-			rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, -jumpVel);
-		}
-		
-		
-		// movement left and right
-		if(Input.GetButton("Horizontal"))
-		{
-			float axis = Input.GetAxis("Horizontal");
-			// if both left and right are pressed mario does an awkward moon walk thing.
-			if(axis == 0){
-				rigidbody2D.velocity = new Vector2(.1f,rigidbody2D.velocity.y);
-			}
-			else
-			{
-				if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)){
-					rigidbody2D.velocity = new Vector2((2*RightLeft * axis), rigidbody2D.velocity.y); 
-					if(RightLeft <= sprintMaxRL)
-					{
-						RightLeft += .5f;
-					}
-				}else
+				if(prevDirection == KeyCode.D)
 				{
-					rigidbody2D.velocity = new Vector2((RightLeft * axis), rigidbody2D.velocity.y); 
-					if(RightLeft <= MaxRL)
+					runAnim.SetBool("ChangeDirection",false);
+					canSlide = false;
+					animTime = Time.time;
+				}
+			}
+			else if((rigidbody2D.velocity.x > 0))
+			{
+				if(prevDirection == KeyCode.A)
+				{
+					runAnim.SetBool("ChangeDirection",false);
+					canSlide = false;
+					animTime = Time.time;
+				}
+			}
+
+			if(Time.time - animTime > .50f)
+			{
+				canSlide = true;
+			}
+
+			// THIS IS TO ANIMATE MARIO SLIDE
+			if(Input.GetKeyUp(KeyCode.A) && canSlide)
+			{
+				if(prevDirection == KeyCode.D)
+				{
+					runAnim.SetBool("ChangeDirection",true);
+				}
+				prevDirection = KeyCode.A;
+			}
+			else if(Input.GetKeyUp(KeyCode.D) && canSlide)
+			{
+				if(prevDirection == KeyCode.A)
+				{
+					runAnim.SetBool("ChangeDirection",true);
+				}
+				prevDirection = KeyCode.D;
+			}
+			//END OF SLIDE CODE
+
+			// animate jump
+			runAnim.SetBool("isGrounded",grounded);
+
+
+			if (Input.GetAxis("Horizontal") > 0) {
+				transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x),transform.localScale.y);
+				MarioDir = 1;
+			}
+
+			if (Input.GetAxis("Horizontal") < 0) {
+				transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x),transform.localScale.y);
+				MarioDir = -1;
+			}
+
+
+
+			// creates 3 line casts between player and empty object, if "Ground" layer comes in contact with line allows jump 
+			groundPosC = new Vector2(GroundCheckC.transform.position.x, GroundCheckC.transform.position.y);
+			groundPosL = new Vector2(GroundCheckL.transform.position.x, GroundCheckL.transform.position.y);
+			groundPosR = new Vector2(GroundCheckR.transform.position.x, GroundCheckR.transform.position.y);
+			playePos = new Vector2(transform.position.x, transform.position.y);
+			grounded = Physics2D.Linecast(playePos , groundPosC , 1 << LayerMask.NameToLayer("Ground"))
+						|| Physics2D.Linecast(playePos , groundPosL , 1 << LayerMask.NameToLayer("Ground"))
+						|| Physics2D.Linecast(playePos , groundPosR , 1 << LayerMask.NameToLayer("Ground"));
+			
+				
+				
+				//y is flawed but funtionally works way better...
+			if(rigidbody2D.velocity.y == 0)
+			{
+				grounded = true;
+				jumping = false;
+			}
+
+
+			if(Input.GetKeyDown(Jump) && grounded)
+			{
+
+				more_jump = true;
+				grounded = false;
+				jumpFromHeight = transform.position.y;
+
+				jumping = true;
+
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+			}
+
+			if(!Input.GetKey(Jump)){
+				more_jump = false;
+			}
+			if (jumping && !grounded && rigidbody2D.velocity.y > 0 && 
+							((Input.GetKey (Jump) && more_jump && (transform.position.y - jumpFromHeight) < maxJumpHeight) 
+							|| (transform.position.y - jumpFromHeight) < minJumpHeight)) {
+
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+			}
+			if(rigidbody2D.velocity.y < -jumpVel){
+
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, -jumpVel);
+			}
+			
+			
+			// movement left and right
+			if(Input.GetButton("Horizontal"))
+			{
+				float axis = Input.GetAxis("Horizontal");
+				// if both left and right are pressed mario does an awkward moon walk thing.
+				if(axis == 0){
+					rigidbody2D.velocity = new Vector2(.1f,rigidbody2D.velocity.y);
+				}
+				else
+				{
+					if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)){
+						rigidbody2D.velocity = new Vector2((2*RightLeft * axis), rigidbody2D.velocity.y); 
+						if(RightLeft <= sprintMaxRL)
+						{
+							RightLeft += .5f;
+						}
+					}else
 					{
-						RightLeft += .5f;
+						rigidbody2D.velocity = new Vector2((RightLeft * axis), rigidbody2D.velocity.y); 
+						if(RightLeft <= MaxRL)
+						{
+							RightLeft += .5f;
+						}
 					}
 				}
 			}
-		}
-		
-		//refresh rightleft when no longer walking
-		if(Input.GetButtonUp("Horizontal"))
-		{
-			RightLeft = origin;
-		}
-		if(Input.GetKeyDown(FireKey) && canFire && canShoot >0)
-		{
-			GameObject Shot = Instantiate(FireBall, new Vector3(transform.position.x+1 ,transform.position.y + 1,transform.position.z),transform.rotation) as GameObject;
-			Shot.SendMessage("SetDirection", MarioDir);
-			canShoot--;
-		}
-
-		if(StarClock - Time.time <= 0.0f)
-		{
-			StarPower = false;
-		}
-		else if(StarClock - Time.time <= .10f)
-		{
-			if(canFire)
+			
+			//refresh rightleft when no longer walking
+			if(Input.GetButtonUp("Horizontal"))
 			{
-				renderer.material.color = Color.red;
+				RightLeft = origin;
+			}
+			if(Input.GetKeyDown(FireKey) && canFire && canShoot >0)
+			{
+				GameObject Shot = Instantiate(FireBall, new Vector3(transform.position.x+1 ,transform.position.y + 1,transform.position.z),transform.rotation) as GameObject;
+				Shot.SendMessage("SetDirection", MarioDir);
+				canShoot--;
+			}
+
+			if(StarClock - Time.time <= 0.0f)
+			{
+				StarPower = false;
+			}
+			else if(StarClock - Time.time <= .10f)
+			{
+				if(canFire)
+				{
+					renderer.material.color = Color.red;
+				}
+				else
+				{
+					renderer.material.color = Color.white;
+				}
+			}
+			else if(StarClock - Time.time <= 5.0f && StarClock - Time.time > .4f)
+			{
+				if(Time.time - PrevStarTime > .3f)
+				{
+					Color randomC = new Color (Random.Range(.0f,1.0f),Random.Range(.0f,1.0f),Random.Range(.0f,1.0f));
+					renderer.material.color = randomC;
+					PrevStarTime = Time.time;
+				}
 			}
 			else
-			{
-				renderer.material.color = Color.white;
-			}
-		}
-		else if(StarClock - Time.time <= 5.0f && StarClock - Time.time > .4f)
-		{
-			if(Time.time - PrevStarTime > .3f)
 			{
 				Color randomC = new Color (Random.Range(.0f,1.0f),Random.Range(.0f,1.0f),Random.Range(.0f,1.0f));
 				renderer.material.color = randomC;
 				PrevStarTime = Time.time;
 			}
-		}
-		else
-		{
-			Color randomC = new Color (Random.Range(.0f,1.0f),Random.Range(.0f,1.0f),Random.Range(.0f,1.0f));
-			renderer.material.color = randomC;
-			PrevStarTime = Time.time;
 		}
 	}
 
@@ -332,8 +341,10 @@ public class mario_move : MonoBehaviour {
 	}
 
 	void gotBigMushroom(){
-		transform.localScale = new Vector2 (.75f, .8f);
+
 		Large = true;
+		enlarged = true;
+		StartCoroutine("enlarge");
 	}
 	void fireFlower()
 	{
@@ -349,5 +360,29 @@ public class mario_move : MonoBehaviour {
 	{
 		StarPower = true;
 		StarClock = Time.time + 12.0f;
+	}
+
+	IEnumerator enlarge()
+	{
+		rigidbody2D.velocity = new Vector2(0,0);
+		rigidbody2D.gravityScale = 0;
+
+		//change heights
+		transform.localScale = new Vector2 (.75f, .45f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .6f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .45f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .8f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .6f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .8f);
+		yield return new WaitForSeconds(.10f);
+
+		rigidbody2D.gravityScale = 8;
+
+		enlarged = false;
 	}
 }

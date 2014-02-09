@@ -20,7 +20,7 @@ public class shellScript : MonoBehaviour {
 		anim = this.GetComponentInChildren<Animator>();
 		Reborn = Time.time + 5.2f;
 		speed = 0;
-		immune = Time.time  + .05f;
+		immune = Time.time  + .1f;
 	}
 	
 	// Update is called once per frame
@@ -39,18 +39,18 @@ public class shellScript : MonoBehaviour {
 
 	}
 
-	void Hit(Collider2D other)
+	void OnTriggerEnter2D(Collider2D other)
 	{
 		if(other.tag == "Player")
 		{
 			// makes the shell move when player first hits it
 			if(speed == 0)
 			{
-				if(other.transform.position.x - this.transform.position.x < 0)
+				if(other.transform.position.x - transform.position.x < 0)
 				{
 					speed = 10;
 				}
-				else if(other.transform.position.x - this.transform.position.x >= 0)
+				else if(other.transform.position.x - transform.position.x >= 0)
 				{
 					speed = -10;
 				}
@@ -68,7 +68,7 @@ public class shellScript : MonoBehaviour {
 			other.SendMessage("FlipDeath");
 			shiftTime = Time.time + .1f;
 		}
-		else if(Time.time - shiftTime > 0)
+		else if(other.tag != "Floor" && Time.time - shiftTime > 0)
 		{
 			//Debug.Log(other.tag);
 			speed *= -1;

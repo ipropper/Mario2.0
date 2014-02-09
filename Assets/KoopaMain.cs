@@ -10,6 +10,7 @@ public class KoopaMain : MonoBehaviour {
 
 	Animator anim;
 	public GameObject KoopaShell;
+	float ChangeDirTime = 0.0f;
 	
 	void Start () {
 		anim = this.GetComponentInChildren<Animator>();
@@ -18,18 +19,39 @@ public class KoopaMain : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-
-		if(!anim.GetBool("Flip"))
+		if(mario_move.enlarged)
+		{
+			//do nothing
+		}
+		else if(!anim.GetBool("Flip"))
 		{
 			this.transform.position = new Vector3 (transform.position.x + movement * Time.deltaTime, transform.position.y, transform.position.z);
 		}
 	}
 	
 	void OnTriggerEnter2D(Collider2D other){
-		if(other.tag != "Floor" && other.tag != "Player"){
+		if(other.tag != "Floor" && other.tag != "Player" && Time.time - ChangeDirTime > 0)
+		{
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)
 			movement *= -1;
+			ChangeDirTime = Time.time + .05f;
 			transform.localScale = new Vector2(this.transform.localScale.x * -1.0f,this.transform.localScale.y);
+		}
+		else if(other.tag == "Player")
+		{
+			if(other.rigidbody2D.velocity.y < 0 && other.transform.position.y > this.transform.position.y)
+			{
+				other.SendMessage("bounceOnEnemy");
+				StompDeath();
+			}
+			else if(mario_move.StarPower)
+			{
+				FlipDeath();
+			}
+			else
+			{
+				other.SendMessage("hitByEnemy");
+			}
 		}
 	}
 
@@ -51,21 +73,6 @@ public class KoopaMain : MonoBehaviour {
 	}
 
 	void Hit(Collider2D other){
-		if(other.tag == "Player")
-		{
-			if(other.rigidbody2D.velocity.y < 0 && other.transform.position.y > this.transform.position.y)
-			{
-				other.SendMessage("bounceOnEnemy");
-				StompDeath();
-			}
-			else if(mario_move.StarPower)
-			{
-				FlipDeath();
-			}
-			else
-			{
-				other.SendMessage("hitByEnemy");
-			}
-		}
+
 	}
 }

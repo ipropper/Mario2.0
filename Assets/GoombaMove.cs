@@ -12,7 +12,7 @@ public class GoombaMove : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		if(stomp)
+		if(stomp || mario_move.enlarged)
 		{
 			//do not move
 		}
@@ -53,10 +53,11 @@ public class GoombaMove : MonoBehaviour {
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)
 			movement *= -1;
 		}
-		if(other.tag == "Player"){
-			if(other.rigidbody2D.velocity.y < 0 && other.transform.position.y > this.transform.position.y + .5f)
+		else if(other.tag == "Player")
+		{
+			if(other.rigidbody2D.velocity.y < 0 && other.gameObject.transform.position.y > this.transform.position.y + .5f)
 			{
-				other.SendMessage("bounceOnEnemy");
+				other.gameObject.SendMessage("bounceOnEnemy");
 				stomp = true;
 				StompDeath();
 				//Debug.Log("goomba killed");
@@ -67,7 +68,7 @@ public class GoombaMove : MonoBehaviour {
 			}
 			else if (!stomp)
 			{
-				other.SendMessage("hitByEnemy");
+				other.gameObject.SendMessage("hitByEnemy");
 			}
 		}
 	}

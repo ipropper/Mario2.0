@@ -20,6 +20,9 @@ public class questionBlockScript : MonoBehaviour {
 	public GameObject FireFlower;
 	public GameObject PowerStar;
 
+	public GameObject edgeCheckL;
+	public GameObject edgeCheckR;
+
 
 	bool hit = false;
 
@@ -34,6 +37,22 @@ public class questionBlockScript : MonoBehaviour {
 	void Start () {
 		jumpBox = transform.parent.GetComponent<Animator> ();
 		flashBox = GetComponent<Animator> ();
+
+		Vector2 leftPos = new Vector2(edgeCheckL.transform.position.x, edgeCheckL.transform.position.y);
+		Vector2 rightPos = new Vector2(edgeCheckR.transform.position.x, edgeCheckR.transform.position.y);
+		Vector2 blockposL = new Vector2(transform.position.x-.6f, transform.position.y+.5f);
+		Vector2 blockposR = new Vector2(transform.position.x+.6f, transform.position.y+.5f);
+		RaycastHit2D toLeft = Physics2D.Linecast (blockposL, leftPos, 1 << LayerMask.NameToLayer ("Ground"));
+		RaycastHit2D toRight = Physics2D.Linecast (blockposR, rightPos, 1 << LayerMask.NameToLayer ("Ground"));
+		if(toLeft){
+			//Debug.Log (toLeft.collider.tag);
+			leftEdge=false;
+		}
+		else leftEdge=true;
+		if(Physics2D.Linecast(blockposR , rightPos , 1 << LayerMask.NameToLayer("Ground"))){
+			rightEdge=false;
+		}
+		else rightEdge=true;
 	}
 	
 	// Update is called once per frame
@@ -45,9 +64,17 @@ public class questionBlockScript : MonoBehaviour {
 		}
 	}
 
+	IEnumerator disableAnim(){
+		yield return new WaitForSeconds (1f);
+		jumpBox.enabled = false;
+		flashBox.enabled = false;
+	}
+
 
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag=="Player" && Full){
+
+			//Debug.Log("box");
 
 			if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) < .5f){
 
@@ -62,6 +89,8 @@ public class questionBlockScript : MonoBehaviour {
 				//TODO
 				if(boxContents==spawnType.COIN){
 					Instantiate(Coin, new Vector3(transform.position.x,transform.position.y+1,transform.position.z),transform.rotation);
+					GuiValues.coins += 1;
+					GuiValues.points+= 200;
 				}
 				else if(boxContents==spawnType.STAR)
 				{
@@ -78,16 +107,17 @@ public class questionBlockScript : MonoBehaviour {
 				if(spawnNum == 0)
 				{
 					Full = false;
+					StartCoroutine("disableAnim");
 				}
 			}
-			else if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
+			else if(other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
 			        && leftEdge && transform.position.x > other.transform.position.x)
 			{
 				other.transform.position = new Vector3 (transform.position.x - 1.0f,
 				                                        other.transform.position.y,
 				                                        other.transform.position.z);
 			}
-			else if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
+			else if(other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) >= .5f 
 			        && rightEdge && transform.position.x < other.transform.position.x)
 			{
 				other.transform.position = new Vector3 (transform.position.x + 1.0f,
@@ -95,5 +125,23 @@ public class questionBlockScript : MonoBehaviour {
 				                                        other.transform.position.z);
 			}
 		}
+	}
+
+	void onBlockDestroy(){
+		Vector2 leftPos = new Vector2(edgeCheckL.transform.position.x, edgeCheckL.transform.position.y);
+		Vector2 rightPos = new Vector2(edgeCheckR.transform.position.x, edgeCheckR.transform.position.y);
+		Vector2 blockposL = new Vector2(transform.position.x-.6f, transform.position.y+.5f);
+		Vector2 blockposR = new Vector2(transform.position.x+.6f, transform.position.y+.5f);
+		RaycastHit2D toLeft = Physics2D.Linecast (blockposL, leftPos, 1 << LayerMask.NameToLayer ("Ground"));
+		RaycastHit2D toRight = Physics2D.Linecast (blockposR, rightPos, 1 << LayerMask.NameToLayer ("Ground"));
+		if(toLeft){
+			//Debug.Log (toLeft.collider.tag);
+			leftEdge=false;
+		}
+		else leftEdge=true;
+		if(Physics2D.Linecast(blockposR , rightPos , 1 << LayerMask.NameToLayer("Ground"))){
+			rightEdge=false;
+		}
+		else rightEdge=true;
 	}
 }

@@ -32,7 +32,7 @@ public class pipeEntranceScript : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D other){
-		Debug.Log("in the trigger zone");
+		//Debug.Log("in the trigger zone");
 		if(other.tag == "Player"){
 			if(direction==enterDir.BOTTOM){
 				if(Input.GetKey(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)){

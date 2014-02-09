@@ -2,13 +2,14 @@
 using System.Collections;
 
 public class GoombaMove : MonoBehaviour {
-	public float movement = -2;
+	public float movement = 0;
 	bool stomp = false;
 	// Use this for initialization
 	Animator anim;
 
 	void Start () {
 		anim = this.GetComponentInChildren<Animator>();
+		movement = 0;
 	}
 	// Update is called once per frame
 	void Update () {
@@ -52,9 +53,10 @@ public class GoombaMove : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if(other.tag != "Floor" && other.tag != "Player")
+		if(other.tag != "Floor" && other.tag != "Player" && other.tag != "checkpoint")
 		{
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)
+			Debug.Log (other.name);
 			movement *= -1;
 		}
 		else if(other.tag == "Player")
@@ -75,5 +77,8 @@ public class GoombaMove : MonoBehaviour {
 				other.gameObject.SendMessage("hitByEnemy");
 			}
 		}
+	}
+	void spawned(){
+		movement = -2;
 	}
 }

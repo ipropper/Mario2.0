@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class KoopaMain : MonoBehaviour {
-	public float movement = -2;
+	public float movement = 0;
 	// Use this for initialization
 
 	//variables accessed by child object
@@ -14,6 +14,7 @@ public class KoopaMain : MonoBehaviour {
 	
 	void Start () {
 		anim = this.GetComponentInChildren<Animator>();
+		movement = 0;
 	}
 
 	// Update is called once per frame
@@ -80,5 +81,9 @@ public class KoopaMain : MonoBehaviour {
 
 	void Hit(Collider2D other){
 
+	}
+
+	void spawned(){
+		movement = -2;
 	}
 }

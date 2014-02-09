@@ -12,7 +12,7 @@ public class KillFire : MonoBehaviour {
 		startTime = Time.time;
 		origin = this.gameObject.layer;
 
-		Debug.Log("meow");
+		//Debug.Log("meow");
 		this.gameObject.layer = LayerMask.NameToLayer("Death");
 		foreach (Transform child in this.transform)
 		{

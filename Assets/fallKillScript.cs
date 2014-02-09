@@ -14,7 +14,7 @@ public class fallKillScript : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		Debug.Log(tag);
+		//Debug.Log(tag);
 		if(other.tag=="Player"){
 			other.SendMessage("fallRespawn");
 

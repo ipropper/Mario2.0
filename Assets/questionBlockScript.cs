@@ -11,6 +11,7 @@ public enum spawnType{
 
 public class questionBlockScript : MonoBehaviour {
 
+	public bool brickSkin = false;
 	public bool leftEdge = false;
 	public bool rightEdge = false;
 	public spawnType boxContents = spawnType.NONE;
@@ -37,6 +38,7 @@ public class questionBlockScript : MonoBehaviour {
 	void Start () {
 		jumpBox = transform.parent.GetComponent<Animator> ();
 		flashBox = GetComponent<Animator> ();
+		flashBox.SetBool("BrickSkin",brickSkin);
 
 		Vector2 leftPos = new Vector2(edgeCheckL.transform.position.x, edgeCheckL.transform.position.y);
 		Vector2 rightPos = new Vector2(edgeCheckR.transform.position.x, edgeCheckR.transform.position.y);

@@ -46,6 +46,6 @@ public class GuiValues : MonoBehaviour{
 			numLives=3;
 			firstSpawn=true;
 		}
-		Application.LoadLevel(0);
+		Application.LoadLevel(Application.loadedLevel);
 	}
 }

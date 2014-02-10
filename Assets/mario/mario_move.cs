@@ -127,11 +127,15 @@ public class mario_move : MonoBehaviour {
 
 			//Mario slide code
 
-			if(Input.GetKey(KeyCode.A) && rigidbody2D.velocity.x > 0.0f)
+			if((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))){
+
+			}
+
+			else if((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && rigidbody2D.velocity.x > 0.0f)
 			{
 				runAnim.SetBool("Slide",true);
 			}
-			else if(Input.GetKey(KeyCode.D) && rigidbody2D.velocity.x < 0.0f)
+			else if((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && rigidbody2D.velocity.x < 0.0f)
 			{
 				runAnim.SetBool("Slide",true);
 			}

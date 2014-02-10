@@ -6,6 +6,7 @@ public class intermedateCamScript : MonoBehaviour {
 	IEnumerator del(){
 		yield return new WaitForSeconds (2);
 		Application.LoadLevel (GuiValues.scene);
+		camScript.camLock = false;
 	}
 
 	// Use this for initialization

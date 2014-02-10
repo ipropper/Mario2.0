@@ -24,6 +24,8 @@ public class questionBlockScript : MonoBehaviour {
 	public GameObject edgeCheckL;
 	public GameObject edgeCheckR;
 
+	public GameObject scoreText;
+
 
 	bool hit = false;
 
@@ -80,6 +82,8 @@ public class questionBlockScript : MonoBehaviour {
 
 			if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) < .5f){
 
+				Camera.main.SendMessage("playbumpSound");
+
 				popWait = Time.time+ .40f;
 
 				//hit=true;
@@ -90,9 +94,12 @@ public class questionBlockScript : MonoBehaviour {
 
 				//TODO
 				if(boxContents==spawnType.COIN){
+					Camera.main.SendMessage("playcoinSound");
 					Instantiate(Coin, new Vector3(transform.position.x,transform.position.y+1,transform.position.z),transform.rotation);
 					GuiValues.coins += 1;
 					GuiValues.points+= 200;
+					GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+					temp.GetComponent<TextMesh>().text = "200";
 				}
 				else if(boxContents==spawnType.STAR)
 				{

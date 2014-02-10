@@ -79,6 +79,8 @@ public class mario_move : MonoBehaviour {
 
 	public bool lockedOut = false;
 
+	public bool jumpSoundPlayed = false;
+
 	void Start()
 	{
 		runAnim = this.GetComponent<Animator>();
@@ -177,6 +179,7 @@ public class mario_move : MonoBehaviour {
 			{
 				grounded = true;
 				jumping = false;
+				jumpSoundPlayed = false;
 			}
 
 
@@ -192,14 +195,25 @@ public class mario_move : MonoBehaviour {
 				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
 			}
 
+
+			if(!Input.GetKey(Jump) && more_jump && !jumpSoundPlayed && !grounded){
+				Camera.main.SendMessage("playjumpSound");
+				jumpSoundPlayed = true;
+			}
+
 			if(!Input.GetKey(Jump)){
 				more_jump = false;
 			}
+
 			if (jumping && !grounded && rigidbody2D.velocity.y > 0 && 
 							((Input.GetKey (Jump) && more_jump && (transform.position.y - jumpFromHeight) < maxJumpHeight) 
 							|| (transform.position.y - jumpFromHeight) < minJumpHeight)) {
 
 				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+			}
+			if(!grounded && (transform.position.y - jumpFromHeight) > minJumpHeight && more_jump && !jumpSoundPlayed){
+				Camera.main.SendMessage("playjumpSound");
+				jumpSoundPlayed = true;
 			}
 			if(rigidbody2D.velocity.y < -jumpVel){
 
@@ -361,6 +375,8 @@ public class mario_move : MonoBehaviour {
 		jumping = false;
 		rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, bounceVal);
 		grounded = false;
+
+		//Camera.main.SendMessage("playbounceSound");
 	}
 
 	void gotBigMushroom(){

@@ -53,11 +53,13 @@ public class brickBlockScript : MonoBehaviour {
 			{
 				if(mario_move.Large == true)
 				{
+					Camera.main.SendMessage("playbreakBlockSound");
 					StartCoroutine("Death");
 				}
 
 				else
 				{
+					Camera.main.SendMessage("playbumpSound");
 					popWait = Time.time + .15f;
 					
 					//Debug.Log("successful block hit");

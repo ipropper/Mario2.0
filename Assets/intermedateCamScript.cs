@@ -13,6 +13,7 @@ public class intermedateCamScript : MonoBehaviour {
 	void Start () {
 		Debug.Log ("intermedate");
 		StartCoroutine ("del");
+		mario_move.Large = false;
 	}
 	
 	// Update is called once per frame

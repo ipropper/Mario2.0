@@ -7,6 +7,8 @@ public class GoombaMove : MonoBehaviour {
 	// Use this for initialization
 	Animator anim;
 
+	public GameObject scoreText;
+
 	void Start () {
 		anim = this.GetComponentInChildren<Animator>();
 		movement = 0;
@@ -34,6 +36,8 @@ public class GoombaMove : MonoBehaviour {
 		anim.SetBool("Flip",true);
 
 		GuiValues.points += 100;
+		GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+		temp.GetComponent<TextMesh>().text = "100";
 	}
 
 	void StompDeath()
@@ -49,6 +53,8 @@ public class GoombaMove : MonoBehaviour {
 		Destroy(this.gameObject,.30f);
 
 		GuiValues.points += 100;
+		GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+		temp.GetComponent<TextMesh>().text = "100";
 	}
 
 	void OnTriggerEnter2D(Collider2D other)

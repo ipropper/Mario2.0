@@ -16,6 +16,7 @@ public class pipeEntranceScript : MonoBehaviour {
 	public Vector3 pipeCameraExitLoc;
 	public bool camLockedOnExit;
 
+
 	// Use this for initialization
 	void Start () {
 	
@@ -28,6 +29,9 @@ public class pipeEntranceScript : MonoBehaviour {
 
 	void goThrough(Collider2D other){
 		other.SendMessage("teleport", pipeExitLoc);
+
+		Camera.main.SendMessage("playpipeSound");
+
 		Camera.main.SendMessage("goThroughPipe", new cameraMove(pipeCameraExitLoc, camLockedOnExit));
 	}
 

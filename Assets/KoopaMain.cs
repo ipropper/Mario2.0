@@ -11,6 +11,8 @@ public class KoopaMain : MonoBehaviour {
 	Animator anim;
 	public GameObject KoopaShell;
 	float ChangeDirTime = 0.0f;
+
+	public GameObject scoreText;
 	
 	void Start () {
 		anim = this.GetComponentInChildren<Animator>();
@@ -66,6 +68,8 @@ public class KoopaMain : MonoBehaviour {
 		anim.SetBool("Flip",true);
 
 		GuiValues.points += 100;
+		GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+		temp.GetComponent<TextMesh>().text = "100";
 
 		Destroy(this.gameObject,3.0f);
 	}
@@ -75,6 +79,8 @@ public class KoopaMain : MonoBehaviour {
 		Destroy(this.gameObject);
 
 		GuiValues.points += 100;
+		GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+		temp.GetComponent<TextMesh>().text = "100";
 
 		Instantiate(KoopaShell,this.transform.position,this.transform.rotation);
 	}

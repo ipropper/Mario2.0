@@ -16,6 +16,8 @@ public class shellScript : MonoBehaviour {
 
 	public GameObject phoenixTurtle;
 
+	public GameObject scoreText;
+
 	void Start () {
 		anim = this.GetComponentInChildren<Animator>();
 		Reborn = Time.time + 5.2f;
@@ -58,6 +60,8 @@ public class shellScript : MonoBehaviour {
 				comeback = false;
 
 				GuiValues.points+=500;
+				GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+				temp.GetComponent<TextMesh>().text = "500";
 			}
 			//attacks player
 			else if(Time.time - NoStrikeTime > 0)

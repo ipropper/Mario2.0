@@ -40,7 +40,6 @@ public class itemSpawn : MonoBehaviour {
 				rigidbody2D.gravityScale = originGrav;
 			}
 			this.transform.FindChild("MushroomTriggerZone").SendMessage("changeDirection");
-			this.transform.FindChild("MushroomTriggerZone").SendMessage("changeDirection");
 			this.GetComponent<Animator>().enabled = false;
 			Destroy(this);
 		}

@@ -7,6 +7,8 @@ public class KillFire : MonoBehaviour {
 	LayerMask origin;
 	float originGrav;
 	bool canUse = false;
+
+	public GameObject scoreText;
 	
 	void Start () {
 		startTime = Time.time;
@@ -38,6 +40,8 @@ public class KillFire : MonoBehaviour {
 		{
 			other.SendMessage("fireFlower");
 			GuiValues.points+=1000;
+			GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+			temp.GetComponent<TextMesh>().text = "1000";
 			Destroy(this.gameObject);
 		}
 	}

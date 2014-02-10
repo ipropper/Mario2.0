@@ -6,6 +6,9 @@ public class superShroomScript: MonoBehaviour {
 	public float movement = 3.0f;
 	int Jump = 0;
 	float origin;
+
+	public GameObject scoreText;
+
 	// Use this for initialization
 	void Start () {
 		origin = transform.parent.rigidbody2D.velocity.y;
@@ -24,6 +27,8 @@ public class superShroomScript: MonoBehaviour {
 			//Debug.Log("got big mushroom");
 			other.SendMessage("gotBigMushroom");
 			GuiValues.points+=1000;
+			GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
+			temp.GetComponent<TextMesh>().text = "1000";
 		}
 		/*else if(other.tag != "Floor" || ){
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)

@@ -25,6 +25,30 @@ public class GuiValues : MonoBehaviour{
 
 	static bool isRespawning=false;
 
+
+	//sounds
+	public AudioSource oneUpSound;
+	public AudioSource breakBlockSound;
+	public AudioSource bumpSound;
+	public AudioSource coinSound;
+	public AudioSource fireballSound;
+	public AudioSource fireWorksSound;
+	public AudioSource flagpoleSound;
+	public AudioSource gameOverSound;
+	public AudioSource jumpSound;
+	public AudioSource bounceSound;
+	public AudioSource kickSound;
+	public AudioSource marioDieSound;
+	public AudioSource pauseSound;
+	public AudioSource pipeSound;
+	public AudioSource powerUpSound;
+	public AudioSource powerUpAppearsSound;
+	public AudioSource stageClearSound;
+	public AudioSource stompSound;
+	public AudioSource warningSound;
+	public AudioSource worldClearSound;
+	
+
 	void Start(){
 
 		isRespawning=false;
@@ -78,6 +102,69 @@ public class GuiValues : MonoBehaviour{
 		numLives=3;
 		firstSpawn=true;
 		Application.LoadLevel(0);
+	}
+
+
+	//sounds
+	public void playoneUpSound(){
+		oneUpSound.Play ();
+	}
+	public void playbreakBlockSound(){
+		breakBlockSound.Play ();
+	}
+	public void playbumpSound(){
+		bumpSound.Play ();
+	}
+	public void playcoinSound(){
+		coinSound.Play ();
+	}
+	public void playfireballSound(){
+		fireballSound.Play ();
+	}
+	public void playfireWorksSound(){
+		fireWorksSound.Play ();
+	}
+	public void playflagpoleSound(){
+		flagpoleSound.Play ();
+	}
+	public void playgameOverSound(){
+		gameOverSound.Play ();
+	}
+	public void playjumpSound(){
+		jumpSound.Play ();
+	}
+	public void playbounceSound(){
+		bounceSound.Play ();
+	}
+	public void playkickSound(){
+		kickSound.Play ();
+	}
+	public void playmarioDieSound(){
+		marioDieSound.Play ();
+	}
+	public void playpauseSound(){
+		pauseSound.Play ();
+	}
+	public void playpipeSound(){
+		pipeSound.Play ();
+	}
+	public void playpowerUpSound(){
+		powerUpSound.Play ();
+	}
+	public void playpowerUpAppearsSound(){
+		powerUpAppearsSound.Play ();
+	}
+	public void playstageClearSound(){
+		stageClearSound.Play ();
+	}
+	public void playstompSound(){
+		stompSound.Play ();
+	}
+	public void playwarningSound(){
+		warningSound.Play ();
+	}
+	public void playworldClearSound(){
+		worldClearSound.Play ();
 	}
 
 }

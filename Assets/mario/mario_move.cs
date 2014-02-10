@@ -124,47 +124,21 @@ public class mario_move : MonoBehaviour {
 		else
 		{
 			runAnim.SetInteger("Speed",(int) Mathf.Ceil(Mathf.Abs(rigidbody2D.velocity.x)));
-			if(rigidbody2D.velocity.x < 0)
+
+			//Mario slide code
+
+			if(Input.GetKey(KeyCode.A) && rigidbody2D.velocity.x > 0.0f)
 			{
-				if(prevDirection == KeyCode.D)
-				{
-					runAnim.SetBool("ChangeDirection",false);
-					canSlide = false;
-					animTime = Time.time;
-				}
+				runAnim.SetBool("Slide",true);
 			}
-			else if((rigidbody2D.velocity.x > 0))
+			else if(Input.GetKey(KeyCode.D) && rigidbody2D.velocity.x < 0.0f)
 			{
-				if(prevDirection == KeyCode.A)
-				{
-					runAnim.SetBool("ChangeDirection",false);
-					canSlide = false;
-					animTime = Time.time;
-				}
+				runAnim.SetBool("Slide",true);
+			}
+			else{
+				runAnim.SetBool("Slide",false);
 			}
 
-			if(Time.time - animTime > .50f)
-			{
-				canSlide = true;
-			}
-
-			// THIS IS TO ANIMATE MARIO SLIDE
-			if(Input.GetKeyUp(KeyCode.A) && canSlide)
-			{
-				if(prevDirection == KeyCode.D)
-				{
-					runAnim.SetBool("ChangeDirection",true);
-				}
-				prevDirection = KeyCode.A;
-			}
-			else if(Input.GetKeyUp(KeyCode.D) && canSlide)
-			{
-				if(prevDirection == KeyCode.A)
-				{
-					runAnim.SetBool("ChangeDirection",true);
-				}
-				prevDirection = KeyCode.D;
-			}
 			//END OF SLIDE CODE
 
 			// animate jump

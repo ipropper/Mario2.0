@@ -19,9 +19,10 @@ public class FireBall : MonoBehaviour {
 		{
 			this.rigidbody2D.velocity = new Vector2 (direction*12,10);
 		}
-		if(other.tag == "Enemy")
+		if(other.tag == "Enemy" && (other.gameObject.layer== LayerMask.NameToLayer("AllCollisions" ))
+		                            || (other.gameObject.layer== LayerMask.NameToLayer("Enemies")))
 		{
-			other.transform.root.SendMessage("FlipDeath");
+			other.SendMessage("FlipDeath");
 		}
 	}
 	void SetDirection(int sign)

@@ -13,6 +13,11 @@ public class GuiValues : MonoBehaviour{
 	public static int numLives=3;
 	public static int timeLeft;
 
+	public static int maxPoints = 0;
+
+	public static string world;
+	public static int scene;
+
 	
 	//for respawn
 	public static Vector3 respawnPoint;
@@ -29,7 +34,21 @@ public class GuiValues : MonoBehaviour{
 
 	void Update(){
 
-		timeLeft = (int)(totalTime + 3*(startTime - Time.time));
+		if(Application.loadedLevel == 1){
+			startTime = Time.time;
+			timeLeft = 400;
+		}
+		else{
+			timeLeft = (int)(totalTime + 3*(startTime - Time.time));
+		}
+		if(points > maxPoints){
+			maxPoints = points;
+		}
+
+		if(GuiValues.timeLeft < 0){
+			respawn();
+			isRespawning = true;
+		}
 	}
 
 	public static void respawn(){
@@ -40,12 +59,25 @@ public class GuiValues : MonoBehaviour{
 		isRespawning = true;
 		numLives--;
 		Debug.Log (numLives + "lives left");
-		if(numLives<0){
+		if(numLives<=0){
 			points=0;
 			coins=0;
 			numLives=3;
 			firstSpawn=true;
+			Application.LoadLevel(0);
+			return;
+
+
 		}
-		Application.LoadLevel(Application.loadedLevel);
+		Application.LoadLevel(1);
 	}
+
+	public static void goToMenu(){
+		points=0;
+		coins=0;
+		numLives=3;
+		firstSpawn=true;
+		Application.LoadLevel(0);
+	}
+
 }

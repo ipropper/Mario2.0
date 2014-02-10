@@ -20,13 +20,15 @@ public class mario_move : MonoBehaviour {
 	public float JumpHeight = 3.0f;
 	public float JumpMore = 0.5f;
 	public float RightLeft = 2.0f;
-	public float MaxRL = 2.0f;
-	public float sprintMaxRL = 4.0f;
+	public float MaxRL = 6f;
+	public float sprintMaxRL = 9f;
 	public float MaxVelocitY = 3.0f;
 
 	public float minJumpHeight = 2f;
 	public float maxJumpHeight = 4f;
 	public float jumpVel = 2.0f;
+
+	public float bounceVal = 12f;
 
 	Vector3 respawnPos;
 
@@ -75,6 +77,8 @@ public class mario_move : MonoBehaviour {
 
 	public static bool enlarged = false;
 
+	public bool lockedOut = false;
+
 	void Start()
 	{
 		runAnim = this.GetComponent<Animator>();
@@ -98,9 +102,10 @@ public class mario_move : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		/*
 		if(GuiValues.timeLeft < 0){
 			GuiValues.respawn();
-		}
+		}*/
 		
 		/*if(temptime < Time.time){
 			Time.timeScale = Random.Range (.1f, 5);
@@ -112,7 +117,7 @@ public class mario_move : MonoBehaviour {
 		}*/
 
 		//animates run + slide
-		if(enlarged)
+		if(enlarged || lockedOut)
 		{
 			// do nothing
 		}
@@ -228,34 +233,67 @@ public class mario_move : MonoBehaviour {
 			if(Input.GetButton("Horizontal"))
 			{
 				float axis = Input.GetAxis("Horizontal");
+				Debug.Log(axis);
 				// if both left and right are pressed mario does an awkward moon walk thing.
 				if(axis == 0){
-					rigidbody2D.velocity = new Vector2(.1f,rigidbody2D.velocity.y);
+					float vel = rigidbody2D.velocity.x;
+					if (vel > 0){
+						rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .2f), rigidbody2D.velocity.y);
+					}
+					if (vel < 0){
+						rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .2f), rigidbody2D.velocity.y);
+					}
 				}
 				else
 				{
-					if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)){
+					if(axis > 0){
+						if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)){
+							rigidbody2D.velocity = new Vector2(Mathf.Min(sprintMaxRL,rigidbody2D.velocity.x+.4f), rigidbody2D.velocity.y);
+						}
+						else{
+							rigidbody2D.velocity = new Vector2(Mathf.Min(MaxRL,rigidbody2D.velocity.x+.2f), rigidbody2D.velocity.y);
+						}
+					}
+					if(axis < 0){
+						if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)){
+							rigidbody2D.velocity = new Vector2(Mathf.Max(-sprintMaxRL,rigidbody2D.velocity.x-.4f), rigidbody2D.velocity.y);
+						}
+						else{
+							rigidbody2D.velocity = new Vector2(Mathf.Max(-MaxRL,rigidbody2D.velocity.x-.2f), rigidbody2D.velocity.y);
+						}
+					}
+
+					/*if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)){
 						rigidbody2D.velocity = new Vector2((2*RightLeft * axis), rigidbody2D.velocity.y); 
 						if(RightLeft <= sprintMaxRL)
 						{
-							RightLeft += .5f;
+							RightLeft += .2f;
 						}
 					}else
 					{
 						rigidbody2D.velocity = new Vector2((RightLeft * axis), rigidbody2D.velocity.y); 
 						if(RightLeft <= MaxRL)
 						{
-							RightLeft += .5f;
+							RightLeft += .2f;
 						}
-					}
+					}*/
 				}
 			}
-			
-			//refresh rightleft when no longer walking
+			else{
+				float vel = rigidbody2D.velocity.x;
+				if (vel > 0){
+					rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .2f), rigidbody2D.velocity.y);
+				}
+				if (vel < 0){
+					rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .2f), rigidbody2D.velocity.y);
+				}
+			}
+				
+				/*//refresh rightleft when no longer walking
 			if(Input.GetButtonUp("Horizontal"))
 			{
-				RightLeft = origin;
-			}
+				RightLeft -= .25f;
+			}*/
 			if(Input.GetKeyDown(FireKey) && canFire && canShoot >0)
 			{
 				GameObject Shot = Instantiate(FireBall, new Vector3(transform.position.x+1 ,transform.position.y + 1,transform.position.z),transform.rotation) as GameObject;
@@ -319,8 +357,10 @@ public class mario_move : MonoBehaviour {
 
 		if(Large == true){
 			Physics2D.IgnoreLayerCollision(10,11,true);
-			transform.localScale = new Vector2 (.70f, .45f);
-			Large=false;
+			//transform.localScale = new Vector2 (.70f, .45f);
+			Large = false;
+			enlarged = true;
+			StartCoroutine("ensmall");
 			canFire=false;
 			renderer.material.color = Color.white;
 
@@ -340,7 +380,8 @@ public class mario_move : MonoBehaviour {
 
 	void bounceOnEnemy(){
 
-		rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+		jumping = false;
+		rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, bounceVal);
 		grounded = false;
 	}
 
@@ -370,7 +411,7 @@ public class mario_move : MonoBehaviour {
 	{
 		rigidbody2D.velocity = new Vector2(0,0);
 		rigidbody2D.gravityScale = 0;
-
+		
 		//change heights
 		transform.localScale = new Vector2 (.75f, .45f);
 		yield return new WaitForSeconds(.10f);
@@ -384,9 +425,32 @@ public class mario_move : MonoBehaviour {
 		yield return new WaitForSeconds(.10f);
 		transform.localScale = new Vector2 (.75f, .8f);
 		yield return new WaitForSeconds(.10f);
-
+		
 		rigidbody2D.gravityScale = 8;
-
+		
+		enlarged = false;
+	}
+	IEnumerator ensmall()
+	{
+		rigidbody2D.velocity = new Vector2(0,0);
+		rigidbody2D.gravityScale = 0;
+		
+		//change heights
+		transform.localScale = new Vector2 (.75f, .8f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .6f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .8f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .45f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .6f);
+		yield return new WaitForSeconds(.10f);
+		transform.localScale = new Vector2 (.75f, .45f);
+		yield return new WaitForSeconds(.10f);
+		
+		rigidbody2D.gravityScale = 8;
+		
 		enlarged = false;
 	}
 
@@ -394,4 +458,16 @@ public class mario_move : MonoBehaviour {
 		this.transform.position = endPos;
 	}
 
+	IEnumerator moveToEnding(){
+		camScript.camLock = true;
+		yield return new WaitForSeconds (3);
+
+		GuiValues.goToMenu();
+	}
+
+
+	public void hitFlagPole(){
+		lockedOut = true;
+		StartCoroutine ("moveToEnding");
+	}
 }

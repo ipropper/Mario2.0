@@ -11,6 +11,11 @@ public class DestroySideFire : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		transform.eulerAngles = new Vector3(0,0,0);
+
+		if(transform.position.x - Camera.main.transform.position.x > 8.0){
+			GameObject.Find("Mario").SendMessage("resetShot");
+			Destroy(this.transform.parent.gameObject);
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other)

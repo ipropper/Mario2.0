@@ -18,7 +18,7 @@ public class camScript : MonoBehaviour {
 
 	public GameObject respawn1;
 
-	public bool camLock=false;
+	public static bool camLock=false;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +34,7 @@ public class camScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(Mario.transform.position.x - maxXPos > 0){
+		if(Mario.transform.position.x - maxXPos > 0 && !camLock){
 			
 			maxXPos = Mario.transform.position.x;
 			transform.position = new Vector3(maxXPos,transform.position.y,transform.position.z);

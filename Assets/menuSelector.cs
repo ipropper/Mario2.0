@@ -7,7 +7,8 @@ public class menuSelector : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		GuiValues.numLives = 3;
+		GuiValues.firstSpawn = true;
 	}
 	
 	// Update is called once per frame

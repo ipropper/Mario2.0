@@ -5,7 +5,8 @@ public enum spawnType{
 	NONE,
 	COIN,
 	SUPERSHROOM,
-	STAR
+	STAR,
+	ONEUPSHROOM
 }
 
 
@@ -20,11 +21,16 @@ public class questionBlockScript : MonoBehaviour {
 	public GameObject Coin;
 	public GameObject FireFlower;
 	public GameObject PowerStar;
+	public GameObject oneUpShroom;
 
 	public GameObject edgeCheckL;
 	public GameObject edgeCheckR;
 
 	public GameObject scoreText;
+
+	public bool invisible = false;
+
+	float blockCooldown;
 
 
 	bool hit = false;
@@ -57,6 +63,12 @@ public class questionBlockScript : MonoBehaviour {
 			rightEdge=false;
 		}
 		else rightEdge=true;
+
+		blockCooldown = Time.time;
+
+		if(invisible){
+			renderer.enabled = false;
+		}
 	}
 	
 	// Update is called once per frame
@@ -76,11 +88,13 @@ public class questionBlockScript : MonoBehaviour {
 
 
 	void OnTriggerEnter2D(Collider2D other){
-		if(other.tag=="Player" && Full){
-
+		if(other.tag=="Player" && Full && blockCooldown < Time.time){
+			blockCooldown = Time.time + .2f;
 			//Debug.Log("box");
 
 			if(!hit && other.rigidbody2D.velocity.y > 8 && Mathf.Abs(transform.position.x - other.transform.position.x) < .5f){
+
+				this.renderer.enabled = true;
 
 				Camera.main.SendMessage("playbumpSound");
 
@@ -110,11 +124,16 @@ public class questionBlockScript : MonoBehaviour {
 					Instantiate(Shroom, new Vector3(transform.position.x,transform.position.y,transform.position.z),transform.rotation);
 					Camera.main.SendMessage("playpowerUpAppearsSound");
 				}
+				else if(boxContents==spawnType.ONEUPSHROOM){
+					Instantiate(oneUpShroom, new Vector3(transform.position.x,transform.position.y,transform.position.z),transform.rotation);
+					Camera.main.SendMessage("playpowerUpAppearsSound");
+				}
 				else
 				{
 					Instantiate(FireFlower, new Vector3(transform.position.x,transform.position.y,transform.position.z),transform.rotation);
 					Camera.main.SendMessage("playpowerUpAppearsSound");
 				}
+
 				spawnNum--;
 				if(spawnNum == 0)
 				{

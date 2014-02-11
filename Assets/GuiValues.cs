@@ -86,9 +86,10 @@ public class GuiValues : MonoBehaviour{
 		if(numLives<=0){
 			points=0;
 			coins=0;
-			numLives=3;
+			numLives=0;
 			firstSpawn=true;
-			Application.LoadLevel(0);
+			scene = 0;
+			Application.LoadLevel(1);
 			return;
 
 

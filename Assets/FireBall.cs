@@ -15,10 +15,10 @@ public class FireBall : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if(other.tag == "Floor")
-		{
+		//if(other.tag == "Floor")
+		//{
 			this.rigidbody2D.velocity = new Vector2(direction*12,10);
-		}
+		//}
 	}
 	void SetDirection(int sign)
 	{

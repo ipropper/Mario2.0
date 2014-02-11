@@ -288,7 +288,7 @@ public class mario_move : MonoBehaviour {
 			}*/
 			if(Input.GetKeyDown(FireKey) && canFire && canShoot >0)
 			{
-				GameObject Shot = Instantiate(FireBall, new Vector3(transform.position.x+1 ,transform.position.y + 1,transform.position.z),transform.rotation) as GameObject;
+				GameObject Shot = Instantiate(FireBall, new Vector3(transform.position.x+MarioDir ,transform.position.y + 1,transform.position.z),transform.rotation) as GameObject;
 				Shot.SendMessage("SetDirection", MarioDir);
 				canShoot--;
 			}

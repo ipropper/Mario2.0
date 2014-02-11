@@ -32,6 +32,7 @@ public class shellScript : MonoBehaviour {
 			speed = 0;
 		}
 		this.transform.position = new Vector3 (transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);
+		//this.rigidbody2D.velocity = new Vector2 (speed, rigidbody2D.velocity.y);
 		if(Time.time - Reborn > 0 && comeback)
 		{
 			Instantiate(phoenixTurtle,this.transform.position,this.transform.rotation);

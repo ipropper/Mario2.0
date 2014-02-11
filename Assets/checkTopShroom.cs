@@ -26,6 +26,7 @@ public class checkTopShroom : MonoBehaviour {
 			if(other.rigidbody2D.velocity.x > 0 && other.transform.position.x - this.transform.position.x < 0 ||
 			   other.rigidbody2D.velocity.x < 0 && other.transform.position.x - this.transform.position.x > 0)
 			{
+				Debug.Log ("reversing mushroom");
 				other.transform.FindChild("MushroomTriggerZone").SendMessage("changeDirection");
 			}
 			other.transform.FindChild("MushroomTriggerZone").SendMessage("JumpHeight",15);

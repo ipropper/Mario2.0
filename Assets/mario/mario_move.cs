@@ -266,7 +266,7 @@ public class mario_move : MonoBehaviour {
 			if(Input.GetButton("Horizontal"))
 			{
 				float axis = Input.GetAxis("Horizontal");
-				Debug.Log(axis);
+				//Debug.Log(axis);
 				// if both left and right are pressed mario does an awkward moon walk thing.
 				if(axis == 0){
 					float vel = rigidbody2D.velocity.x;

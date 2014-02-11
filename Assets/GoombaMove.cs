@@ -67,14 +67,14 @@ public class GoombaMove : MonoBehaviour {
 		}
 		else if(other.tag == "Player")
 		{
-			if(other.rigidbody2D.velocity.y < 0 && other.gameObject.transform.position.y > this.transform.position.y + .5f)
+			if(other.rigidbody2D.velocity.y < 0 && other.gameObject.transform.position.y > this.transform.position.y + .5f && !stomp)
 			{
 				other.gameObject.SendMessage("bounceOnEnemy");
 				stomp = true;
 				StompDeath();
 				//Debug.Log("goomba killed");
 			}
-			else if(mario_move.StarPower)
+			else if(mario_move.StarPower && !stomp)
 			{
 				FlipDeath();
 			}

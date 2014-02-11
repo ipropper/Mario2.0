@@ -15,6 +15,7 @@ public class mario_move : MonoBehaviour {
 	public GameObject cam;
 
 	public KeyCode Jump;
+	public KeyCode Jump2;
 	
 	
 	public float JumpHeight = 3.0f;
@@ -25,8 +26,8 @@ public class mario_move : MonoBehaviour {
 	public float MaxVelocitY = 3.0f;
 
 	public float minJumpHeight = 2f;
-	public float maxJumpHeight = 4f;
-	public float jumpVel = 2.0f;
+	public float maxJumpHeight = 3.65f;
+	public float jumpVel = 12f;
 
 	public float bounceVal = 12f;
 
@@ -64,6 +65,7 @@ public class mario_move : MonoBehaviour {
 	public static bool Large = false;
 
 	public KeyCode FireKey;
+	public KeyCode FireKey2;
 	public GameObject FireBall;
 	bool canFire = false;
 	int canShoot = 2;
@@ -100,6 +102,35 @@ public class mario_move : MonoBehaviour {
 
 		//Time.timeScale = 2;
 	}
+
+	float gravAdjust(float altitude, float velocity){
+
+		if(altitude>maxJumpHeight){
+			if(velocity > 0){
+				return 6f + .4f*altitude;
+			}
+			else{
+				return 8f - .4f*altitude;
+			}
+		}
+		return 8;
+	}
+
+	float velocityByAltitude(float altitude, float velocity){
+		if(altitude >= maxJumpHeight+1){
+			return -.1f;
+		}
+
+		if(velocity > 0){
+			return jumpVel - 10.4f*.05f*altitude;
+		}
+		if(velocity <=0){
+			return -jumpVel - 12.4f*.15f*altitude;
+		}
+		return 0;
+
+
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -135,10 +166,12 @@ public class mario_move : MonoBehaviour {
 
 			else if((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && rigidbody2D.velocity.x > 0.0f)
 			{
+				rigidbody2D.velocity = new Vector2(Mathf.Max(0,rigidbody2D.velocity.x - .3f), rigidbody2D.velocity.y);
 				runAnim.SetBool("Slide",true);
 			}
 			else if((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && rigidbody2D.velocity.x < 0.0f)
 			{
+				rigidbody2D.velocity = new Vector2(Mathf.Min(0,rigidbody2D.velocity.x + .3f), rigidbody2D.velocity.y);
 				runAnim.SetBool("Slide",true);
 			}
 			else{
@@ -177,13 +210,18 @@ public class mario_move : MonoBehaviour {
 				//y is flawed but funtionally works way better...
 			if(rigidbody2D.velocity.y == 0)
 			{
+				if(jumping && transform.position.y - jumpFromHeight > 1 && !jumpSoundPlayed){
+					Camera.main.SendMessage("playjumpSound");
+				}
+
 				grounded = true;
 				jumping = false;
 				jumpSoundPlayed = false;
+				rigidbody2D.gravityScale = 8;
 			}
 
 
-			if(Input.GetKeyDown(Jump) && grounded)
+			if((Input.GetKeyDown(Jump) || Input.GetKeyDown(Jump2)) && grounded)
 			{
 
 				more_jump = true;
@@ -196,22 +234,25 @@ public class mario_move : MonoBehaviour {
 			}
 
 
-			if(!Input.GetKey(Jump) && more_jump && !jumpSoundPlayed && !grounded){
+			if(!(Input.GetKey(Jump) || Input.GetKey(Jump2)) && more_jump && !jumpSoundPlayed && !grounded){
 				Camera.main.SendMessage("playjumpSound");
 				jumpSoundPlayed = true;
 			}
 
-			if(!Input.GetKey(Jump)){
+			if(!(Input.GetKey(Jump) || (Input.GetKey(Jump2)))){
 				more_jump = false;
 			}
 
 			if (jumping && !grounded && rigidbody2D.velocity.y > 0 && 
-							((Input.GetKey (Jump) && more_jump && (transform.position.y - jumpFromHeight) < maxJumpHeight) 
+							(((Input.GetKey(Jump) || Input.GetKey(Jump2)) && more_jump && (transform.position.y - jumpFromHeight) < maxJumpHeight) 
 							|| (transform.position.y - jumpFromHeight) < minJumpHeight)) {
 
-				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+				//rigidbody2D.gravityScale = gravAdjust(transform.position.y - jumpFromHeight, rigidbody2D.velocity.y);
+
+				//rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, velocityByAltitude(transform.position.y - jumpFromHeight, rigidbody2D.velocity.y));
 			}
-			if(!grounded && (transform.position.y - jumpFromHeight) > minJumpHeight && more_jump && !jumpSoundPlayed){
+			else if(jumping && !grounded && !jumpSoundPlayed){
 				Camera.main.SendMessage("playjumpSound");
 				jumpSoundPlayed = true;
 			}
@@ -230,10 +271,10 @@ public class mario_move : MonoBehaviour {
 				if(axis == 0){
 					float vel = rigidbody2D.velocity.x;
 					if (vel > 0){
-						rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .2f), rigidbody2D.velocity.y);
+						rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .3f), rigidbody2D.velocity.y);
 					}
 					if (vel < 0){
-						rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .2f), rigidbody2D.velocity.y);
+						rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .3f), rigidbody2D.velocity.y);
 					}
 				}
 				else
@@ -271,13 +312,13 @@ public class mario_move : MonoBehaviour {
 					}*/
 				}
 			}
-			else{
+			else if (!jumping){
 				float vel = rigidbody2D.velocity.x;
 				if (vel > 0){
-					rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .2f), rigidbody2D.velocity.y);
+					rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .3f), rigidbody2D.velocity.y);
 				}
 				if (vel < 0){
-					rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .2f), rigidbody2D.velocity.y);
+					rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .3f), rigidbody2D.velocity.y);
 				}
 			}
 				
@@ -286,7 +327,7 @@ public class mario_move : MonoBehaviour {
 			{
 				RightLeft -= .25f;
 			}*/
-			if(Input.GetKeyDown(FireKey) && canFire && canShoot >0)
+				if((Input.GetKeyDown(FireKey) || Input.GetKeyDown(FireKey2))  && canFire && canShoot >0)
 			{
 				GameObject Shot = Instantiate(FireBall, new Vector3(transform.position.x+MarioDir ,transform.position.y + 1,transform.position.z),transform.rotation) as GameObject;
 				Shot.SendMessage("SetDirection", MarioDir);
@@ -343,12 +384,14 @@ public class mario_move : MonoBehaviour {
 		renderer.material.color = temp;
 
 		Physics2D.IgnoreLayerCollision(10,16,false); 
+		Physics2D.IgnoreLayerCollision(10,0,false);
 	}
 
 	void hitByEnemy(){
 
 		if(Large == true){
 			Physics2D.IgnoreLayerCollision(10,16,true);
+			Physics2D.IgnoreLayerCollision(10,0,true);
 			//transform.localScale = new Vector2 (.70f, .45f);
 			Large = false;
 			enlarged = true;
@@ -387,8 +430,13 @@ public class mario_move : MonoBehaviour {
 	}
 	void fireFlower()
 	{
-		canFire = true;
-		this.renderer.material.color = Color.red;
+		if(Large){
+			canFire = true;
+			this.renderer.material.color = Color.red;
+		}
+		else{
+			gotBigMushroom();
+		}
 	}
 	void resetShot()
 	{

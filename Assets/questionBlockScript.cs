@@ -26,6 +26,8 @@ public class questionBlockScript : MonoBehaviour {
 	public GameObject edgeCheckL;
 	public GameObject edgeCheckR;
 
+	//public bool goFor10;
+
 	public GameObject scoreText;
 
 	public bool invisible = false;
@@ -40,6 +42,8 @@ public class questionBlockScript : MonoBehaviour {
 
 	float popWait=0;
 	bool Full = true;
+
+	public float repeatTimer=0;
 
 
 	// Use this for initialization
@@ -96,6 +100,10 @@ public class questionBlockScript : MonoBehaviour {
 
 				this.renderer.enabled = true;
 
+				if(spawnNum > 1 && repeatTimer == 0){
+					repeatTimer = Time.time + 10/3f;
+				}
+
 				Camera.main.SendMessage("playbumpSound");
 
 				popWait = Time.time+ .40f;
@@ -106,7 +114,6 @@ public class questionBlockScript : MonoBehaviour {
 
 				jumpBox.SetBool("isPop",true);
 
-				//TODO
 				if(boxContents==spawnType.COIN){
 					Camera.main.SendMessage("playcoinSound");
 					Instantiate(Coin, new Vector3(transform.position.x,transform.position.y+1,transform.position.z),transform.rotation);
@@ -134,7 +141,12 @@ public class questionBlockScript : MonoBehaviour {
 					Camera.main.SendMessage("playpowerUpAppearsSound");
 				}
 
-				spawnNum--;
+				if(repeatTimer == 0){
+					spawnNum--;
+				}
+				if(repeatTimer < Time.time){
+					spawnNum = 0;
+				}
 				if(spawnNum == 0)
 				{
 					Full = false;

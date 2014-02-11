@@ -115,7 +115,7 @@ public class mario_move : MonoBehaviour {
 		}*/
 
 		/*if(Time.time > invincibleTime){
-			Physics2D.IgnoreLayerCollision(10,11,false); 
+			Physics2D.IgnoreLayerCollision(10,16,false); 
 		}*/
 
 		//animates run + slide
@@ -342,13 +342,13 @@ public class mario_move : MonoBehaviour {
 		temp.a = 1;
 		renderer.material.color = temp;
 
-		Physics2D.IgnoreLayerCollision(10,11,false); 
+		Physics2D.IgnoreLayerCollision(10,16,false); 
 	}
 
 	void hitByEnemy(){
 
 		if(Large == true){
-			Physics2D.IgnoreLayerCollision(10,11,true);
+			Physics2D.IgnoreLayerCollision(10,16,true);
 			//transform.localScale = new Vector2 (.70f, .45f);
 			Large = false;
 			enlarged = true;
@@ -422,7 +422,6 @@ public class mario_move : MonoBehaviour {
 		yield return new WaitForSeconds(.10f);
 		
 		rigidbody2D.gravityScale = 8;
-		
 		enlarged = false;
 	}
 	IEnumerator ensmall()

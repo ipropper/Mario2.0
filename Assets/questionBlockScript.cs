@@ -104,13 +104,16 @@ public class questionBlockScript : MonoBehaviour {
 				else if(boxContents==spawnType.STAR)
 				{
 					Instantiate(PowerStar, new Vector3(transform.position.x,transform.position.y,transform.position.z),transform.rotation);
+					Camera.main.SendMessage("playpowerUpAppearsSound");
 				}
 				else if(boxContents==spawnType.SUPERSHROOM && mario_move.Large == false){
 					Instantiate(Shroom, new Vector3(transform.position.x,transform.position.y,transform.position.z),transform.rotation);
+					Camera.main.SendMessage("playpowerUpAppearsSound");
 				}
 				else
 				{
 					Instantiate(FireFlower, new Vector3(transform.position.x,transform.position.y,transform.position.z),transform.rotation);
+					Camera.main.SendMessage("playpowerUpAppearsSound");
 				}
 				spawnNum--;
 				if(spawnNum == 0)

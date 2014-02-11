@@ -376,7 +376,7 @@ public class mario_move : MonoBehaviour {
 		rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, bounceVal);
 		grounded = false;
 
-		//Camera.main.SendMessage("playbounceSound");
+		Camera.main.SendMessage("playstompSound");
 	}
 
 	void gotBigMushroom(){
@@ -403,6 +403,7 @@ public class mario_move : MonoBehaviour {
 
 	IEnumerator enlarge()
 	{
+		Camera.main.SendMessage ("playpowerUpSound");
 		rigidbody2D.velocity = new Vector2(0,0);
 		rigidbody2D.gravityScale = 0;
 		
@@ -426,6 +427,7 @@ public class mario_move : MonoBehaviour {
 	}
 	IEnumerator ensmall()
 	{
+		Camera.main.SendMessage ("playpipeSound");
 		rigidbody2D.velocity = new Vector2(0,0);
 		rigidbody2D.gravityScale = 0;
 		

@@ -54,6 +54,8 @@ public class flagpoleScript : MonoBehaviour {
 			other.rigidbody2D.velocity = new Vector2(0, other.rigidbody2D.velocity.y);
 
 			other.SendMessage("hitFlagPole");
+
+			Camera.main.SendMessage("playflagpoleSound");
 		}
 	}
 }

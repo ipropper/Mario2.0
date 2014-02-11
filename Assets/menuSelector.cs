@@ -26,6 +26,7 @@ public class menuSelector : MonoBehaviour {
 			if( selection){
 				GuiValues.world = "?-¿";
 				GuiValues.scene = 3;
+				GuiValues.numLives = 99;
 				Application.LoadLevel(1);
 			}
 		}

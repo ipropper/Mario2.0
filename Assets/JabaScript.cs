@@ -12,13 +12,8 @@ public class JabaScript : MonoBehaviour {
 	void Update () {
 		if(TurnStuffOn.On == true)
 		{
-			StartCoroutine("Suprise");
+			renderer.enabled = true;
 		}
-	}
-	IEnumerator Suprise() 
-	{
-		yield return new WaitForSeconds(3.0f);
-		renderer.enabled = true;
 	}
 
 }

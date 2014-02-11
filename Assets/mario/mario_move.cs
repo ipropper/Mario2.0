@@ -405,13 +405,13 @@ public class mario_move : MonoBehaviour {
 		}
 		else{
 			//transform.position = respawnPos;
-			StartCoroutine("Death");
+			StartCoroutine("Death",true);
 		}
 	}
 
 	void fallRespawn(){
 		//transform.position = respawnPos;
-		GuiValues.respawn ();
+		StartCoroutine("Death",false);
 
 	}
 
@@ -498,11 +498,14 @@ public class mario_move : MonoBehaviour {
 		
 		enlarged = false;
 	}
-	IEnumerator Death()
+	IEnumerator Death(bool anim)
 	{
 		enlarged = true;
 		renderer.enabled = false;
-		Instantiate(myDeath,transform.position,transform.rotation);
+		if(anim)
+		{
+			Instantiate(myDeath,transform.position,transform.rotation);
+		}
 		cam.SendMessage("playmarioDieSound");
 		cam.GetComponent<AudioSource>().mute = true;
 
@@ -512,6 +515,7 @@ public class mario_move : MonoBehaviour {
 		enlarged = false;
 		GuiValues.respawn();
 	}
+	
 
 	public void teleport(Vector3 endPos){
 		this.transform.position = endPos;

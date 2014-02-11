@@ -74,7 +74,7 @@ public class shellScript : MonoBehaviour {
 			other.SendMessage("FlipDeath");
 			shiftTime = Time.time + .1f;
 		}
-		else if(other.tag != "Floor" && Time.time - shiftTime > 0 && other.gameObject.layer != LayerMask.NameToLayer("Enemies"))
+		else if(other.tag != "Floor")
 		{
 			//Debug.Log(other.tag);
 			speed *= -1;

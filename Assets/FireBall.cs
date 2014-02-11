@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class FireBall : MonoBehaviour {
@@ -17,12 +17,7 @@ public class FireBall : MonoBehaviour {
 	{
 		if(other.tag == "Floor")
 		{
-			this.rigidbody2D.velocity = new Vector2 (direction*12,10);
-		}
-		if(other.tag == "Enemy" && (other.gameObject.layer== LayerMask.NameToLayer("AllCollisions" ))
-		                            || (other.gameObject.layer== LayerMask.NameToLayer("Enemies")))
-		{
-			other.SendMessage("FlipDeath");
+			this.rigidbody2D.velocity = new Vector2(direction*12,10);
 		}
 	}
 	void SetDirection(int sign)

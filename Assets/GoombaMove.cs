@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class GoombaMove : MonoBehaviour {
-	public float movement = 0;
+	public float movement = 2.0f;
 	bool stomp = false;
 	// Use this for initialization
 	Animator anim;
@@ -62,7 +62,7 @@ public class GoombaMove : MonoBehaviour {
 		if(other.tag != "Floor" && other.tag != "Player" && other.tag != "checkpoint")
 		{
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)
-			Debug.Log (other.name);
+			//Debug.Log (other.name);
 			movement *= -1;
 		}
 		else if(other.tag == "Player")

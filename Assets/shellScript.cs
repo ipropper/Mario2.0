@@ -81,4 +81,11 @@ public class shellScript : MonoBehaviour {
 			speed *= -1;
 		}
 	}
+
+	void FlipDeath()
+	{
+		GameObject Back = Instantiate(phoenixTurtle,this.transform.position,this.transform.rotation) as GameObject;
+		Back.transform.root.SendMessage("FlipDeath");
+		Destroy(this.gameObject);
+	}
 }

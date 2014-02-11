@@ -83,6 +83,8 @@ public class mario_move : MonoBehaviour {
 
 	public bool jumpSoundPlayed = false;
 
+	public GameObject myDeath;
+
 	void Start()
 	{
 		runAnim = this.GetComponent<Animator>();
@@ -403,7 +405,7 @@ public class mario_move : MonoBehaviour {
 		}
 		else{
 			//transform.position = respawnPos;
-			GuiValues.respawn();
+			StartCoroutine("Death");
 		}
 	}
 
@@ -495,6 +497,20 @@ public class mario_move : MonoBehaviour {
 		rigidbody2D.gravityScale = 8;
 		
 		enlarged = false;
+	}
+	IEnumerator Death()
+	{
+		enlarged = true;
+		renderer.enabled = false;
+		Instantiate(myDeath,transform.position,transform.rotation);
+		cam.SendMessage("playmarioDieSound");
+		cam.GetComponent<AudioSource>().mute = true;
+
+		yield return new WaitForSeconds(3.0f);
+
+		cam.GetComponent<AudioSource>().mute = false;
+		enlarged = false;
+		GuiValues.respawn();
 	}
 
 	public void teleport(Vector3 endPos){

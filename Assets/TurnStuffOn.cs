@@ -17,7 +17,9 @@ public class TurnStuffOn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(triggered){
+			GuiValues.stopTime();
+		}
 	}
 	void OnTriggerEnter2D(Collider2D other) 
 	{

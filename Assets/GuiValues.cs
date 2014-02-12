@@ -25,6 +25,8 @@ public class GuiValues : MonoBehaviour{
 
 	static bool isRespawning=false;
 
+	static bool timeStopped=false;
+
 
 	//sounds
 	public AudioSource oneUpSound;
@@ -51,6 +53,7 @@ public class GuiValues : MonoBehaviour{
 
 	void Start(){
 
+		timeStopped = false;
 		isRespawning=false;
 		startTime = Time.time;
 
@@ -58,9 +61,13 @@ public class GuiValues : MonoBehaviour{
 
 	void Update(){
 
+
 		if(Application.loadedLevel == 1){
 			startTime = Time.time;
 			timeLeft = 400;
+		}
+		else if(timeStopped){
+
 		}
 		else{
 			timeLeft = (int)(totalTime + 3*(startTime - Time.time));
@@ -95,6 +102,10 @@ public class GuiValues : MonoBehaviour{
 
 		}
 		Application.LoadLevel(1);
+	}
+
+	public static void stopTime(){
+		timeStopped=true;
 	}
 
 	public static void goToMenu(){

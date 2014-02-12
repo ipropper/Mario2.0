@@ -51,11 +51,11 @@ public class shellScript : MonoBehaviour {
 			{
 				if(other.transform.position.x - transform.position.x < 0)
 				{
-					speed = 12;
+					speed = 10;
 				}
 				else if(other.transform.position.x - transform.position.x >= 0)
 				{
-					speed = -12;
+					speed = -10;
 				}
 				NoStrikeTime = Time.time + .2f;
 				comeback = false;
@@ -80,5 +80,12 @@ public class shellScript : MonoBehaviour {
 			//Debug.Log(other.tag);
 			speed *= -1;
 		}
+	}
+
+	void FlipDeath()
+	{
+		GameObject Back = Instantiate(phoenixTurtle,this.transform.position,this.transform.rotation) as GameObject;
+		Back.transform.root.SendMessage("FlipDeath");
+		Destroy(this.gameObject);
 	}
 }

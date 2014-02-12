@@ -83,6 +83,9 @@ public class mario_move : MonoBehaviour {
 
 	public bool jumpSoundPlayed = false;
 
+	public GameObject myDeath;
+	bool Dead = false;
+
 	void Start()
 	{
 		runAnim = this.GetComponent<Animator>();
@@ -133,7 +136,7 @@ public class mario_move : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 		/*
 		if(GuiValues.timeLeft < 0){
@@ -156,7 +159,7 @@ public class mario_move : MonoBehaviour {
 		}
 		else
 		{
-			runAnim.SetInteger("Speed",(int) Mathf.Ceil(Mathf.Abs(rigidbody2D.velocity.x)));
+			runAnim.SetFloat("Vel", (Mathf.Abs(rigidbody2D.velocity.x)));
 
 			//Mario slide code
 
@@ -166,12 +169,12 @@ public class mario_move : MonoBehaviour {
 
 			else if((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && rigidbody2D.velocity.x > 0.0f)
 			{
-				rigidbody2D.velocity = new Vector2(Mathf.Max(0,rigidbody2D.velocity.x - .3f), rigidbody2D.velocity.y);
+				rigidbody2D.velocity = new Vector2(Mathf.Max(0,rigidbody2D.velocity.x - .2f), rigidbody2D.velocity.y);
 				runAnim.SetBool("Slide",true);
 			}
 			else if((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && rigidbody2D.velocity.x < 0.0f)
 			{
-				rigidbody2D.velocity = new Vector2(Mathf.Min(0,rigidbody2D.velocity.x + .3f), rigidbody2D.velocity.y);
+				rigidbody2D.velocity = new Vector2(Mathf.Min(0,rigidbody2D.velocity.x + .2f), rigidbody2D.velocity.y);
 				runAnim.SetBool("Slide",true);
 			}
 			else{
@@ -263,6 +266,8 @@ public class mario_move : MonoBehaviour {
 			
 			
 			// movement left and right
+
+
 			if(Input.GetButton("Horizontal"))
 			{
 				float axis = Input.GetAxis("Horizontal");
@@ -271,10 +276,10 @@ public class mario_move : MonoBehaviour {
 				if(axis == 0){
 					float vel = rigidbody2D.velocity.x;
 					if (vel > 0){
-						rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .3f), rigidbody2D.velocity.y);
+						rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .2f), rigidbody2D.velocity.y);
 					}
 					if (vel < 0){
-						rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .3f), rigidbody2D.velocity.y);
+						rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .2f), rigidbody2D.velocity.y);
 					}
 				}
 				else
@@ -314,11 +319,13 @@ public class mario_move : MonoBehaviour {
 			}
 			else if (!jumping){
 				float vel = rigidbody2D.velocity.x;
-				if (vel > 0){
-					rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .3f), rigidbody2D.velocity.y);
+
+				if(Mathf.Abs(rigidbody2D.velocity.x) < .3f) rigidbody2D.velocity = new Vector2(0,rigidbody2D.velocity.y);
+				else if (vel > 0){
+					rigidbody2D.velocity = new Vector2(Mathf.Max(0,vel - .05f), rigidbody2D.velocity.y);
 				}
-				if (vel < 0){
-					rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .3f), rigidbody2D.velocity.y);
+				else if (vel < 0){
+					rigidbody2D.velocity = new Vector2(Mathf.Min(0,vel + .05f), rigidbody2D.velocity.y);
 				}
 			}
 				
@@ -372,7 +379,7 @@ public class mario_move : MonoBehaviour {
 
 		Color temp = this.renderer.material.color;
 
-		for(int i=0; i < 2f/(2f*.2f); i++){
+		for(int i=0; i < (2.6f)/(2f*.2f); i++){
 			temp.a=.0f;
 			this.renderer.material.color = temp;
 			yield return new WaitForSeconds(.2f);
@@ -403,13 +410,13 @@ public class mario_move : MonoBehaviour {
 		}
 		else{
 			//transform.position = respawnPos;
-			GuiValues.respawn();
+			StartCoroutine("Death",true);
 		}
 	}
 
 	void fallRespawn(){
 		//transform.position = respawnPos;
-		GuiValues.respawn ();
+		StartCoroutine("Death",false);
 
 	}
 
@@ -496,6 +503,28 @@ public class mario_move : MonoBehaviour {
 		
 		enlarged = false;
 	}
+	IEnumerator Death(bool anim)
+	{
+		if(!Dead){
+			rigidbody2D.velocity = new Vector2(0,0);
+			Dead = true;
+			enlarged = true;
+			renderer.enabled = false;
+			if(anim)
+			{
+				Instantiate(myDeath,transform.position,transform.rotation);
+			}
+			cam.SendMessage("playmarioDieSound");
+			cam.GetComponent<AudioSource>().mute = true;
+
+			yield return new WaitForSeconds(3.0f);
+
+			cam.GetComponent<AudioSource>().mute = false;
+			enlarged = false;
+			GuiValues.respawn();
+		}
+	}
+	
 
 	public void teleport(Vector3 endPos){
 		this.transform.position = endPos;

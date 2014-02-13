@@ -48,4 +48,12 @@ public class pipeEntranceScript : MonoBehaviour {
 			}
 		}
 	}
+	void OnTriggerEnter2D(Collider2D other){
+		//Debug.Log("in the trigger zone");
+		if(other.tag == "Player"){
+			if(direction!=enterDir.BOTTOM){
+				goThrough(other);
+			}
+		}
+	}
 }

@@ -134,6 +134,28 @@ public class mario_move : MonoBehaviour {
 
 
 	}
+
+	void Update(){
+
+		if(enlarged || lockedOut)
+		{
+			// do nothing
+		}
+		else
+		{
+			if((Input.GetKeyDown(Jump) || Input.GetKeyDown(Jump2)) && grounded)
+			{
+				
+				more_jump = true;
+				grounded = false;
+				jumpFromHeight = transform.position.y;
+				
+				jumping = true;
+				
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
+			}
+		}
+	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -224,17 +246,7 @@ public class mario_move : MonoBehaviour {
 			}
 
 
-			if((Input.GetKeyDown(Jump) || Input.GetKeyDown(Jump2)) && grounded)
-			{
 
-				more_jump = true;
-				grounded = false;
-				jumpFromHeight = transform.position.y;
-
-				jumping = true;
-
-				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpVel);
-			}
 
 
 			if(!(Input.GetKey(Jump) || Input.GetKey(Jump2)) && more_jump && !jumpSoundPlayed && !grounded){

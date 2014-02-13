@@ -17,11 +17,12 @@ public class superShroomScript: MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		transform.parent.rigidbody2D.velocity = new Vector2(movement,transform.parent.rigidbody2D.velocity.y);
 
 	}
 	
 	void OnTriggerEnter2D(Collider2D other){
-		
+		Debug.Log (other.tag);
 		if(other.tag == "Player"){
 			Destroy(transform.parent.gameObject);
 			//Debug.Log("got big mushroom");
@@ -29,6 +30,10 @@ public class superShroomScript: MonoBehaviour {
 			GuiValues.points+=1000;
 			GameObject temp = Instantiate(scoreText,this.transform.position,this.transform.rotation) as GameObject;
 			temp.GetComponent<TextMesh>().text = "1000";
+		}
+		else if(other.tag != "Floor" && other.tag != "Enemy")
+		{
+			changeDirection();
 		}
 		/*else if(other.tag != "Floor" || ){
 			//if(Mathf.Abs(transform.position.x - other.transform.position.x) > .5)

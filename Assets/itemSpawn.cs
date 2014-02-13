@@ -6,7 +6,9 @@ public class itemSpawn : MonoBehaviour {
 	// Use this for initialization
 	float startTime;
 	LayerMask origin;
+	LayerMask childorigin;
 	float originGrav;
+	
 
 	void Start () {
 		startTime = Time.time;
@@ -33,13 +35,12 @@ public class itemSpawn : MonoBehaviour {
 			this.gameObject.layer = origin;
 			foreach (Transform child in this.transform)
 			{
-				child.gameObject.layer = origin;
+				child.gameObject.layer = LayerMask.NameToLayer("Default");
 			}
 			if(this.rigidbody2D != null)
 			{
 				rigidbody2D.gravityScale = originGrav;
 			}
-			this.transform.FindChild("MushroomTriggerZone").SendMessage("changeDirection");
 			this.GetComponent<Animator>().enabled = false;
 			Destroy(this);
 		}
